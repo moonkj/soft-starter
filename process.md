@@ -13,3 +13,9 @@
 - `src/engine/select.ts`: 기준 전류, 후보 찾기, 카드 값 계산을 순수 함수로 만들었다.
 - 프로토타입과 다른 점: `307` 상수 대신 `frames[].controlVoltage`에서 DC24V 지원 여부와 접미사(-1, -2)를 읽는다. 주위 온도·기동 횟수 필터도 `amb`/`starts` 값과 그룹 정격을 바로 비교한다(40℃·3회는 결과가 같음).
 - 테스트: README 케이스 7건 + 경계값 13건 + 데이터 무결성 5건 = 25건 통과.
+
+## Phase 2 화면 구현
+- 프로토타입 CSS를 `src/styles.css`로 옮기고 인라인 스타일은 클래스로 뺐다. 문구는 `src/strings.ts`에 모았다.
+- 컴포넌트: ConditionPanel, Summary, Results, ModelCard, Seg. 상태는 App의 입력값(Inputs)과 보기 상태(open, offset, more) 두 가지다.
+- 제어전원 안내 문구도 `frames[].controlVoltage`로 만든다. 카탈로그 PDF 주소는 `src/config.ts`(지금 null, 프로토타입처럼 열지 않음).
+- `npm run build` 통과(JS gzip 52KB).
