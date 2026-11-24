@@ -12,6 +12,13 @@ npm test         # 테스트 47건 (엔진, 데이터, 화면)
 npm run build    # dist/ 생성 (정적 파일)
 ```
 
+## 배포
+
+- 주소: https://moonkj.github.io/soft-starter/
+- `main`에 푸시하면 `.github/workflows/deploy.yml`이 테스트 → 빌드 → GitHub Pages 배포를 자동으로 한다. 테스트가 실패하면 배포하지 않는다.
+- 진행 상황은 저장소의 Actions 탭에서 본다. 수동 실행은 Actions > Deploy to GitHub Pages > Run workflow.
+- 공개 저장소·공개 사이트라서 코드, 선정 데이터, 카탈로그 PDF가 모두 공개된다.
+
 ## 구조
 
 | 경로 | 역할 |

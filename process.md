@@ -36,3 +36,8 @@
 - 쪽 번호 확인: 텍스트가 있는 원본(16.5MB)에서 p.6 선정 가이드, p.7~11 Size 1~5 사양, p.12 옵션을 확인했다. 경량본도 같은 쪽 구성이다(p.6, p.11 렌더링 대조). data의 `frames[].page`와 일치한다.
 - `src/config.ts`에 주소를 넣어 `카탈로그 p.N`이 새 탭에서 `#page=N`으로 열린다.
 - 테스트 2건 추가(링크 주소·새 탭, 파일 존재), 47건 통과. dev 서버에서 PDF가 200, application/pdf, 첨부(attachment) 헤더 없음으로 나오는 것을 확인했다.
+
+## 배포 설정
+- 저장소가 공개라서 GitHub Pages(무료)를 쓴다. Pages 소스를 GitHub Actions로 켰다.
+- `.github/workflows/deploy.yml`: main 푸시 시 npm ci → npm test → npm run build → Pages 배포. 테스트 실패 시 배포하지 않는다.
+- Vite `base: './'`라서 `/soft-starter/` 하위 경로에서도 자산과 PDF 경로가 맞는다.

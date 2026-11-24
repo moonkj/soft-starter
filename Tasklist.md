@@ -16,5 +16,5 @@
 
 ## 다음 후보 (사용자 확인 필요)
 - [x] 카탈로그 PDF 연결 (src/config.ts)
-- [ ] 배포 (GitHub Pages 워크플로 등)
+- [x] 배포: GitHub Pages 자동 배포 (https://moonkj.github.io/soft-starter/)
 - [ ] 전달 문서 남은 과제: 오타 103, 외형 방향, In Delta 선정표, 제품 사진
