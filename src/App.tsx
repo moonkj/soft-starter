@@ -54,6 +54,7 @@ export default function App() {
           <Summary s={s} I={I} />
           <Results
             valid={I > 0}
+            current={I}
             cards={cards}
             tc={s.tc}
             offset={view.offset}

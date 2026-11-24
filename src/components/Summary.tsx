@@ -12,7 +12,7 @@ export function Summary({ s, I }: { s: Inputs; I: number }) {
     <section className="summary" aria-label={T.summaryAria}>
       <div className="lead">
         <span className="lead-label">{T.leadLabel}</span>
-        <div className="lead-value" aria-live="polite">
+        <div className="lead-value">
           <span className="big mono" data-testid="current">
             {valid ? r : '—'}
           </span>
@@ -21,28 +21,18 @@ export function Summary({ s, I }: { s: Inputs; I: number }) {
       </div>
       <div className="detail">
         <div className="chips">
-          <Chip on label={`${s.v} V · ${s.hz}Hz`} />
-          <Chip on label={s.mode === 'kW' ? `${s.kw || '-'} kW (계산)` : `${s.amp || '-'} A (명판)`} />
-          <Chip on label={`Trip Class ${s.tc}`} />
-          <Chip on={s.amb !== null} label={'주위 ' + (s.amb ? `${s.amb}℃ 이하` : '-')} />
-          <Chip on={s.starts !== null} label={'기동 ' + (s.starts ? `${s.starts}회/h` : '-')} />
-          <Chip on={s.ctrl !== null} label={'제어전원 ' + (s.ctrl ?? '-')} />
-          <Chip on label="결선 In Line" />
+          <Chip on label={T.chipVoltage(s.v, s.hz)} />
+          <Chip on label={s.mode === 'kW' ? T.chipKw(s.kw) : T.chipA(s.amp)} />
+          <Chip on label={T.chipTc(s.tc)} />
+          <Chip on={s.amb !== null} label={T.chipAmb(s.amb)} />
+          <Chip on={s.starts !== null} label={T.chipStarts(s.starts)} />
+          <Chip on={s.ctrl !== null} label={T.chipCtrl(s.ctrl)} />
+          <Chip on label={T.chipConnection} />
         </div>
         <div className="formula mono">
-          {s.mode === 'kW' ? (
-            <>
-              I = P / (√3 · V · η·cosφ) = {s.kw || 0}kW / (√3 · {s.v}V · {s.pf}) ≈ {r} A
-              <br />
-              <span className="sub">{T.approx}</span>
-            </>
-          ) : (
-            <>
-              명판 정격전류 {s.amp || 0} A 그대로 선정에 써요.
-              <br />
-              <span className="sub">{T.catalogBasis}</span>
-            </>
-          )}
+          {s.mode === 'kW' ? T.formulaKw(s.kw, s.v, s.pf, r) : T.formulaA(s.amp)}
+          <br />
+          <span className="sub">{s.mode === 'kW' ? T.approx : T.catalogBasis}</span>
         </div>
       </div>
     </section>

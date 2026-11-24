@@ -1,6 +1,8 @@
 import { CATALOG_PDF_URL } from '../config'
+import { LOW_MARGIN_PCT } from '../engine/select'
 import type { Card, TripClass } from '../engine/types'
-import { ctrlText, dutyText, T } from '../strings'
+import { ctrlText, dutyText } from '../format'
+import { T } from '../strings'
 
 interface Props {
   it: Card
@@ -10,9 +12,8 @@ interface Props {
 
 export function ModelCard({ it, tc, onUp }: Props) {
   const f = it.frame
-  const page = f.page
   return (
-    <article className={'card' + (it.best ? ' best' : '') + (it.low ? ' low' : '')} data-testid="card">
+    <article className={'card' + (it.best ? ' best' : '') + (it.low ? ' low' : '')} data-testid="card" tabIndex={-1}>
       <div className="top">
         <div className="img" aria-hidden="true">
           {T.imgPlaceholder[0]}
@@ -25,9 +26,7 @@ export function ModelCard({ it, tc, onUp }: Props) {
             <span className="tag bp">{f.bypass}</span>
             <span className="tag">{f.ip}</span>
           </div>
-          <span className="help meta">
-            LVSS 시리즈 · {f.size} · {f.amp}
-          </span>
+          <span className="help meta">{T.seriesLine(f.size, f.amp)}</span>
           <span className="mono code" data-testid="code">
             {it.code}
           </span>
@@ -38,27 +37,27 @@ export function ModelCard({ it, tc, onUp }: Props) {
               {T.incomplete[2]}
             </p>
           )}
-          <span className="help meta">
-            외형 {f.dim} mm · {f.term}
-          </span>
+          <span className="help meta">{T.outline(f.dim, f.term)}</span>
         </div>
       </div>
 
       <div className="sep amps">
         <div className="line">
           <span>
-            필요 <b className="mono">{it.needA} A</b> / 적용 <b className="mono">{it.appliedA} A</b>
+            {T.need}
+            <b className="mono">{it.needA} A</b>
+            {T.applied}
+            <b className="mono">{it.appliedA} A</b>
           </span>
           <span>
-            정격 여유 <b className={it.low ? 'margin-low' : 'margin-ok'}>+{it.marginPct}%</b>
+            {T.margin}
+            <b className={it.low ? 'margin-low' : 'margin-ok'}>+{it.marginPct}%</b>
           </span>
         </div>
         <div className="bar" role="presentation">
           <i style={{ width: it.loadPct + '%' }} />
         </div>
-        <span className="help meta">
-          Trip Class {tc} · {dutyText(it.duty)}
-        </span>
+        <span className="help meta">{T.dutyLine(tc, dutyText(it.duty))}</span>
       </div>
 
       {it.next && (
@@ -76,20 +75,20 @@ export function ModelCard({ it, tc, onUp }: Props) {
       {it.low && it.next && (
         <div className="warn" role="note">
           <strong>{T.warnTitle}</strong>
-          {T.warnBody(it.next.code)}
+          {T.warnBody(it.next.code, LOW_MARGIN_PCT)}
         </div>
       )}
 
       <div className="sep foot">
         <span>{ctrlText(f)}</span>
         {CATALOG_PDF_URL ? (
-          <a href={`${CATALOG_PDF_URL}#page=${page}`} target="_blank" rel="noopener noreferrer">
-            {T.catalogPage(page)}
+          <a href={`${CATALOG_PDF_URL}#page=${f.page}`} target="_blank" rel="noopener noreferrer">
+            {T.catalogPage(f.page)}
           </a>
         ) : (
-          // TODO: 카탈로그 PDF가 정해지면 src/config.ts에 주소를 넣는다.
-          <a href="#" onClick={(e) => e.preventDefault()}>
-            {T.catalogPage(page)}
+          // TODO: 카탈로그 PDF가 정해지면 src/config.ts에 주소를 넣는다. 그 전까지는 프로토타입처럼 열지 않는다.
+          <a href="#" aria-disabled="true" onClick={(e) => e.preventDefault()}>
+            {T.catalogPage(f.page)}
           </a>
         )}
       </div>
