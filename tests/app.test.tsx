@@ -273,3 +273,22 @@ describe('개선 R2: 포커스와 화면 읽기', () => {
     expect(document.getElementById('details-in')).not.toBeNull()
   })
 })
+
+describe('카탈로그 PDF 연결', () => {
+  it('카탈로그 p.N 링크는 PDF의 해당 쪽을 새 탭으로 연다', () => {
+    render(<App />)
+    const links = cards().map((c) => within(c).getByRole('link', { name: /카탈로그 p\./ }) as HTMLAnchorElement)
+    // 201·203·205는 Size 2 → p.8, 301은 Size 3 → p.9
+    expect(links.map((a) => a.getAttribute('href'))).toEqual([
+      './catalogs/LVSS_Catalog_KO.pdf#page=8',
+      './catalogs/LVSS_Catalog_KO.pdf#page=8',
+      './catalogs/LVSS_Catalog_KO.pdf#page=8',
+      './catalogs/LVSS_Catalog_KO.pdf#page=9',
+    ])
+    for (const a of links) {
+      expect(a.getAttribute('target')).toBe('_blank')
+      expect(a.getAttribute('rel')).toContain('noopener')
+      expect(a.getAttribute('aria-disabled')).toBeNull()
+    }
+  })
+})

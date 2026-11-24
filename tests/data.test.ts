@@ -37,3 +37,12 @@ describe('lvss-selection.json', () => {
     for (const f of D.frames) expect(f.page).toMatch(/^\d+$/)
   })
 })
+
+describe('카탈로그 PDF', () => {
+  it('config의 PDF 파일이 public/에 있다', async () => {
+    const { CATALOG_PDF_URL } = await import('../src/config')
+    if (CATALOG_PDF_URL === null) return
+    const files = Object.keys(import.meta.glob('../public/**/*.pdf', { query: '?url', eager: true }))
+    expect(files).toContain('../public/' + CATALOG_PDF_URL.replace(/^\.\//, ''))
+  })
+})
