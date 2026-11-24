@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soft Starter Selection Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0E1A2B;--ink2:#3D4757;--muted:#5A6577;--line:#DDE2E8;--bg:#F4F6F9;--blue:#1F5FBF;--navy:#1F2A3A;--red:#D7192D;--ok:#157F3B;--warn:#9A4A00;--warnBg:#FFF4E0;--warnBd:#F0C27A}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans KR','Malgun Gothic',system-ui,sans-serif}
+button,input,select{font-family:inherit}button{cursor:pointer}
+.mono{font-family:'IBM Plex Mono',monospace}
+header{background:#fff;border-bottom:1px solid var(--line)}
+.wrap{max-width:1440px;margin:0 auto;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+h1{margin:0;font-size:24px;display:flex;align-items:center;gap:12px}h1:before{content:"";width:4px;height:26px;background:var(--red)}
+.body{max-width:1440px;margin:0 auto;padding:28px 32px 48px;display:flex;flex-wrap:wrap;gap:28px}
+aside{flex:1 1 300px;max-width:380px;min-width:0;background:#fff;border:1px solid var(--line);border-top:3px solid var(--navy);border-radius:6px;padding:24px;display:flex;flex-direction:column;gap:22px;align-self:flex-start}
+main{flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:28px}
+.lbl{font-size:14px;font-weight:700}.req{color:var(--blue);font-size:12px;font-weight:600;margin-left:4px}
+.help{margin:0;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr}.seg button{height:48px;border:1px solid #D5DBE3;background:#fff;color:var(--ink2);font-size:14px;font-weight:600}
+.seg button[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+.seg.sm{gap:6px}.seg.sm button{height:44px;font-size:12.5px;border-radius:4px;white-space:nowrap;padding:0 4px}
+.field{height:48px;padding:0 12px;border:1px solid #C9D0DA;border-radius:4px;font-size:15px;color:var(--ink);background:#fff;min-width:0}
+.unit{width:56px;height:48px;border:1px solid #C9D0DA;border-radius:4px;display:flex;align-items:center;justify-content:center;background:var(--bg);font-size:14px}
+.group{display:flex;flex-direction:column;gap:10px}
+.note{margin:0;padding:10px 12px;background:#F1F4F8;border-radius:4px;font-size:12.5px;line-height:1.6;color:var(--ink2)}
+.btn-ghost{min-height:36px;padding:0 12px;border:1px solid #B9C1CC;background:var(--bg);color:var(--ink2);border-radius:4px;font-size:13px}
+.details{border:1px solid #E1E6EC;border-radius:4px;background:#FAFBFC}
+.details>button{width:100%;min-height:52px;padding:0 16px;border:0;background:transparent;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:700;color:var(--ink)}
+.details .in{padding:4px 16px 18px;display:flex;flex-direction:column;gap:16px}
+.summary{background:var(--navy);color:#fff;border-radius:6px;padding:26px 30px;display:flex;flex-wrap:wrap;gap:28px;align-items:center}
+.summary .big{font-size:64px;font-weight:600;line-height:1}
+.chip{padding:6px 11px;border:1px dashed #566379;color:#C3CCD8;border-radius:3px;font-size:13px;font-weight:600}.chip.on{border:1px solid #5E86C4;background:#2B4C80;color:#fff}
+.formula{border-top:1px dashed #4A576C;padding-top:12px;font-size:13px;line-height:1.7;color:#DCE2EA}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(400px,100%),1fr));gap:20px}
+.card{background:#fff;border:1px solid var(--line);border-top:3px solid var(--line);border-radius:6px;padding:22px;display:flex;flex-direction:column;gap:16px}
+.card.best{border-color:#9DB8E3;border-top-color:var(--blue)}
+.img{flex:0 0 96px;height:124px;background:#EEF1F5;border:1px dashed #B9C1CC;border-radius:4px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;color:var(--muted)}
+.tag{padding:3px 8px;border-radius:3px;font-size:12px;font-weight:600;border:1px solid #C9D0DA;color:var(--ink2)}
+.tag.best{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}.tag.bp{border-color:#9DB8E3;color:#1E4C8F;background:#EEF4FC}
+.bar{height:8px;background:#E6EAEF;border-radius:4px;overflow:hidden}.bar i{display:block;height:8px;background:var(--blue)}.low .bar i{background:#D97706}
+.sep{padding-top:14px;border-top:1px solid #EDF0F4}
+.warn{padding:12px 14px;background:var(--warnBg);border:1px solid var(--warnBd);border-radius:4px;font-size:13px;line-height:1.6;color:#6E3C00}
+.link{min-height:40px;border:0;background:transparent;color:var(--blue);font-size:13.5px;font-weight:700;text-decoration:underline}
+.empty{padding:40px;background:#fff;border:1px solid var(--line);border-radius:6px;text-align:center;color:var(--ink2)}
+.shift{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#E9F0FB;border-radius:4px;font-size:14px;color:#1E3A66}
+a{color:var(--blue)}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Soft Starter Selection Tool</h1><span class="help">LVSS 시리즈 · 200~480V · 50/60Hz 공용</span></div></header>
+<div class="body"><aside id="panel"></aside><main id="main"></main></div>
+<script>
+// ===== 카탈로그 데이터 & 선정 로직 (data/lvss-selection.json 과 동일 내용) =====
+const ROWS=[
+[17,4,7.5,7.5,'101','103','105',1],[22,5.5,11,11,'103','105','107',1],[29,7.5,15,15,'105','107','109',1],[35,7.5,18.5,18.5,'107','109','111',1],[41,11,22,22,'109','111','113',1],[55,15,30,30,'111','113','115',1],[66,18.5,37,37,'113','115','117',1],[80,22,45,45,'115','117','201',1],[100,30,55,55,'117','201','203',1],[132,37,75,90,'201','203','205',1],[160,45,90,110,'203','205',null,1],[195,55,110,132,'205',null,null,1],
+[160,45,90,110,null,null,'301',2],[195,55,110,132,null,'301','303',2],[242,75,132,150,'301','303','305',2],[302,90,160,185,'303','305','307',2],[361,110,200,220,'305','307','309',2],[430,132,250,280,'307','309',null,2],[500,160,280,315,'309',null,null,2],
+[430,132,250,280,null,null,'401',3],[500,160,280,315,null,'401','403',3],[610,200,355,375,'401','403','501',3],[722,220,400,425,'403','501','503',3],[850,280,500,530,'501','503','505',3],[960,315,560,600,'503','505',null,3],[1080,355,630,670,'505',null,null,3]];
+const SEC={1:{starts:5,amb:50,txt:'5회/h 기동 · 50℃'},2:{starts:3,amb:50,txt:'3회/h 기동 · 50℃'},3:{starts:3,amb:40,txt:'3회/h 기동 · 40℃'}};
+function frame(m){const n=parseInt(m,10);
+ if(n<=105)return{size:'Size 1',amp:'최대 100A',bypass:'내장 Bypass',ip:'IP20',term:'Cage Clamp',dim:'95 × 270 × 176',amb:'-20 ~ 50℃',page:'7',guard:'Finger Guard LS-LVSS-005'};
+ if(n<=117)return{size:'Size 1',amp:'최대 100A',bypass:'내장 Bypass',ip:'IP20',term:'Cage Clamp',dim:'95 × 270 × 176',amb:'-20 ~ 50℃',page:'7',guard:'Finger Guard LS-LVSS-005'};
+ if(n<=205)return{size:'Size 2',amp:'최대 195A',bypass:'내장 Bypass',ip:'IP20',term:'Cage Clamp',dim:'143 × 318 × 232',amb:'-20 ~ 50℃',page:'8',guard:'Finger Guard LS-LVSS-009'};
+ if(n<=305)return{size:'Size 3',amp:'최대 500A',bypass:'내장 Bypass',ip:'IP00',term:'Plain Busbar',dim:'205 × 490 × 310',amb:'-20 ~ 50℃',page:'9',guard:''};
+ if(n<=309)return{size:'Size 3',amp:'최대 500A',bypass:'내장 Bypass',ip:'IP00',term:'Plain Busbar',dim:'205 × 494 × 310',amb:'-20 ~ 50℃',page:'9',guard:''};
+ if(n<=403)return{size:'Size 4',amp:'최대 722A',bypass:'Bypass 없음',ip:'IP00',term:'Plain Busbar',dim:'490 × 677 × 282',amb:'-20 ~ 40℃',page:'10',guard:''};
+ return{size:'Size 5',amp:'최대 1080A',bypass:'Bypass 없음',ip:'IP00',term:'Plain Busbar',dim:'635 × 731 × 324',amb:'-20 ~ 40℃',page:'11',guard:''};}
+function calcI(s){if(s.mode==='A')return parseFloat(s.amp)||0;const kw=parseFloat(s.kw)||0,v=parseFloat(s.v)||0,pf=parseFloat(s.pf)||0;if(!v||!pf)return 0;return kw*1000/(Math.sqrt(3)*v*pf);}
+function hits(s,I){const ti={10:4,20:5,30:6}[s.tc],out=[],seen={};
+ for(const r of ROWS){const m=r[ti],sec=SEC[r[7]];if(!m||r[0]<I||seen[m])continue;
+  if(s.amb===50&&sec.amb<50)continue;if(s.starts===5&&sec.starts<5)continue;if(s.ctrl==='DC24V'&&parseInt(m,10)>=307)continue;
+  seen[m]=1;out.push({m,a:r[0],sec});}
+ return out.sort((x,y)=>parseInt(x.m,10)-parseInt(y.m,10));}
+function code(m,ctrl){const n=parseInt(m,10);if(n<307)return 'LS-LVSS-'+m;if(ctrl==='AC110V')return 'LS-LVSS-'+m+'-1';if(ctrl==='AC220V')return 'LS-LVSS-'+m+'-2';return 'LS-LVSS-'+m+'-?';}
+
+// ===== 상태 =====
+const INIT={v:'380',hz:60,mode:'kW',kw:'55',amp:'104',tc:10,ctrl:null,amb:null,starts:null,pf:'0.80',open:false,offset:0,more:false};
+let S=Object.assign({},INIT);
+const TCD={10:'과부하 시 10초 안에 트립. 기동이 가벼운 일반 부하에 써요.',20:'과부하 시 20초 안에 트립. 기동 시간이 긴 부하에 써요.',30:'과부하 시 30초 안에 트립. 관성이 커서 오래 걸려 기동하는 부하에 써요.'};
+function set(o,keep){S=Object.assign(S,keep?{}:{offset:0,more:false},o);render();}
+function seg(name,opts,cur,cls){return `<div class="seg ${cls||''}">`+opts.map(([v,l])=>`<button data-set="${name}" data-val='${JSON.stringify(v)}' aria-pressed="${cur===v}">${l}</button>`).join('')+`</div>`;}
+
+function renderPanel(){
+ const vs=['200','220','230','380','400','415','440','460','480'];
+ document.getElementById('panel').innerHTML=`
+ <div class="group sep" style="border:0;padding:0 0 20px;border-bottom:1px solid #E6EAEF">
+  <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0;font-size:19px">사용 조건</h2><button class="btn-ghost" id="reset">조건 초기화</button></div>
+  <p class="help">전압과 모터 명판의 정격전류(A)만 넣어도 추천이 나와요. 명판을 확인하기 어려우면 kW로 넣어 주세요.</p></div>
+ <div class="group"><label class="lbl" for="volt">전원 전압<span class="req">필수</span></label>
+  <div style="display:flex;gap:8px"><select id="volt" class="field" style="flex:1">${vs.map(v=>`<option value="${v}" ${S.v===v?'selected':''}>${v} V</option>`).join('')}</select>
+  <div style="width:120px">${seg('hz',[[50,'50Hz'],[60,'60Hz']],S.hz)}</div></div></div>
+ <div class="group"><span class="lbl">모터 전류<span class="req">필수</span></span>
+  ${seg('mode',[['A','명판 전류(A)'],['kW','kW']],S.mode)}
+  <div style="display:flex;gap:8px"><input id="motor" class="field" style="flex:1;font-size:17px" type="number" inputmode="decimal" aria-label="모터 전류 또는 용량" value="${S.mode==='kW'?S.kw:S.amp}"><span class="unit">${S.mode==='kW'?'kW':'A'}</span></div>
+  <p class="help">${S.mode==='kW'?'명판 전류를 확인하기 어려울 때만 쓰세요. 일반적인 효율·역률로 계산한 값이라 실제 모터와 다를 수 있어요.':'모터 명판에 적힌 정격전류(FLC)를 넣어 주세요. 가장 정확한 방법이에요.'}</p></div>
+ <div class="group"><span class="lbl">Trip Class</span>${seg('tc',[[10,'Class 10'],[20,'Class 20'],[30,'Class 30']],S.tc)}<p class="note">${TCD[S.tc]}</p></div>
+ <div class="details"><button id="toggle" aria-expanded="${S.open}"><span>상세 조건</span><span style="color:var(--blue);font-size:20px">${S.open?'−':'+'}</span></button>
+ ${S.open?`<div class="in">
+  <div class="group"><span class="lbl" style="font-size:13px">제어 전원</span><div class="seg sm" style="grid-auto-flow:row;grid-template-columns:1fr 1fr">${[[null,'선택 안 함'],['DC24V','DC24V'],['AC110V','AC110V'],['AC220V','AC220V']].map(([v,l])=>`<button data-set="ctrl" data-val='${JSON.stringify(v)}' aria-pressed="${S.ctrl===v}">${l}</button>`).join('')}</div></div>
+  <div class="group"><span class="lbl" style="font-size:13px">주위 온도</span>${seg('amb',[[null,'상관없음'],[40,'40℃ 이하'],[50,'50℃ 이하']],S.amb,'sm')}</div>
+  <div class="group"><span class="lbl" style="font-size:13px">기동 횟수</span>${seg('starts',[[null,'상관없음'],[3,'시간당 3회'],[5,'시간당 5회']],S.starts,'sm')}</div>
+  <div class="group"><label class="lbl" style="font-size:13px" for="pf">효율 × 역률 (kW 계산용)</label><input id="pf" class="field" type="number" step="0.01" value="${S.pf}"></div>
+  <p class="help" style="font-size:12px">결선은 In Line 기준이에요. In Delta로 결선하면 한 단계 높은 모터 용량까지 쓸 수 있어요.</p></div>`:''}</div>`;
+}
+
+function renderMain(){
+ const I=calcI(S),valid=I>0,list=valid?hits(S,I):[];
+ const items=list.map((h,i)=>{const f=frame(h.m),n=parseInt(h.m,10),mg=Math.round((h.a-I)/I*100),nx=list[i+1];return Object.assign({},f,{i,code:code(h.m,S.ctrl),incomplete:n>=307&&!S.ctrl,a:h.a,need:Math.round(I),mg,low:mg<5,load:Math.min(100,Math.round(I/h.a*100)),duty:'Trip Class '+S.tc+' · '+h.sec.txt,ctrlTxt:n>=307?'제어전원: -1 = AC110V, -2 = AC220V (DC24V 미지원)':'제어전원: DC24V / AC110V / AC220V 공용',next:nx?{code:code(nx.m,S.ctrl),a:nx.a}:null,best:i===0});});
+ const chip=(l,on)=>`<span class="chip ${on?'on':''}">${l}</span>`;
+ const chips=[chip(S.v+' V · '+S.hz+'Hz',1),chip(S.mode==='kW'?(S.kw||'-')+' kW (계산)':(S.amp||'-')+' A (명판)',1),chip('Trip Class '+S.tc,1),chip('주위 '+(S.amb?S.amb+'℃ 이하':'-'),S.amb),chip('기동 '+(S.starts?S.starts+'회/h':'-'),S.starts),chip('제어전원 '+(S.ctrl||'-'),S.ctrl),chip('결선 In Line',1)].join('');
+ const formula=S.mode==='kW'?`I = P / (√3 · V · η·cosφ) = ${S.kw||0}kW / (√3 · ${S.v}V · ${S.pf}) ≈ ${Math.round(I)} A<br><span style="color:#AEB9C8">근삿값이에요. 명판 전류를 확인하면 더 정확해요.</span>`:`명판 정격전류 ${S.amp||0} A 그대로 선정에 써요.<br><span style="color:#AEB9C8">카탈로그 선정 가이드(In Line 결선) 기준이에요.</span>`;
+ const rest=items.slice(S.offset),vis=S.more?rest:rest.slice(0,4);
+ const card=it=>`<article class="card ${it.best?'best':''} ${it.low?'low':''}">
+  <div style="display:flex;gap:18px"><div class="img">제품<br>이미지</div><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+   <div style="display:flex;flex-wrap:wrap;gap:6px">${it.best?'<span class="tag best">정격 여유 최소</span>':''}<span class="tag bp">${it.bypass}</span><span class="tag">${it.ip}</span></div>
+   <span class="help" style="font-size:13px">LVSS 시리즈 · ${it.size} · ${it.amp}</span>
+   <span class="mono" style="font-size:22px;font-weight:600">${it.code}</span>
+   ${it.incomplete?'<p class="help" style="color:var(--ink2)">형명 끝자리는 제어전원으로 정해져요. 상세 조건에서 <strong>제어 전원</strong>을 고르면 형명이 완성돼요.</p>':''}
+   <span class="help" style="font-size:13px">외형 ${it.dim} mm · ${it.term}</span></div></div>
+  <div class="sep" style="display:flex;flex-direction:column;gap:8px">
+   <div style="display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink2)"><span>필요 <b class="mono">${it.need} A</b> / 적용 <b class="mono">${it.a} A</b></span><span>정격 여유 <b style="color:${it.low?'var(--warn)':'var(--ok)'}">+${it.mg}%</b></span></div>
+   <div class="bar"><i style="width:${it.load}%"></i></div><span class="help" style="font-size:13px">${it.duty}</span></div>
+  ${it.next?`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13.5px;color:var(--ink2)"><span>한 단계 위: <b class="mono">${it.next.code}</b> (${it.next.a} A)</span><button class="link" data-up="${it.i+1}">한 단계 위로 바꿔 보기</button></div>`:''}
+  ${it.low&&it.next?`<div class="warn"><strong>주의</strong> 정격 여유가 5% 미만이에요. 한 단계 위 모델(${it.next.code})도 같이 확인해 보세요.</div>`:''}
+  <div class="sep" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)"><span>${it.ctrlTxt}</span><a href="#" data-page="${it.page}">카탈로그 p.${it.page}</a></div></article>`;
+ document.getElementById('main').innerHTML=`
+ <section class="summary" aria-label="선정 기준">
+  <div style="display:flex;flex-direction:column;gap:6px;padding-right:28px;border-right:1px solid #3A475C"><span style="font-size:13px;color:#C3CCD8">● 선정 기준 전류</span>
+   <div style="display:flex;align-items:baseline;gap:8px"><span class="big mono">${valid?Math.round(I):'—'}</span><span style="font-size:22px;color:#C3CCD8">A</span></div></div>
+  <div style="flex:999 1 380px;min-width:0;display:flex;flex-direction:column;gap:14px"><div style="display:flex;flex-wrap:wrap;gap:8px">${chips}</div><div class="formula mono">${formula}</div></div></section>
+ <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap"><h2 style="margin:0;font-size:20px">추천 모델 <span style="color:var(--muted);font-weight:500">${items.length}건</span></h2><span class="help" style="font-size:13px">정격 여유가 작은 순서예요. 카드마다 해당 카탈로그 페이지를 볼 수 있어요.</span></div>
+ ${S.offset>0?`<div class="shift"><span>한 단계 위 모델부터 보고 있어요.</span><button class="btn-ghost" id="first" style="border-color:var(--blue);color:var(--blue);background:#fff;min-height:40px">처음 추천으로</button></div>`:''}
+ ${!valid?'<div class="empty">왼쪽에 모터 전류나 kW를 넣으면 추천 모델이 나와요.</div>':items.length===0?'<div class="empty"><strong>조건에 맞는 모델이 없어요</strong><br>카탈로그 선정 범위는 최대 1080A예요. 상세 조건을 풀거나 기술상담센터(1544-2080)에 문의해 주세요.</div>':
+ `<div class="cards">${vis.map(card).join('')}</div>${!S.more&&rest.length>4?`<button id="more" class="btn-ghost" style="align-self:center;min-height:48px;padding:0 28px;background:#fff;font-weight:600">추천 모델 ${rest.length-4}건 더 보기</button>`:''}`}`;
+}
+function render(){const a=document.activeElement&&document.activeElement.id;renderPanel();renderMain();if(a&&document.getElementById(a))document.getElementById(a).focus();}
+
+document.addEventListener('click',e=>{const b=e.target.closest('button,a');if(!b)return;
+ if(b.dataset.set){set({[b.dataset.set]:JSON.parse(b.dataset.val)});}
+ else if(b.id==='reset')S=Object.assign({},INIT),render();
+ else if(b.id==='toggle')set({open:!S.open},true);
+ else if(b.id==='more')set({more:true},true);
+ else if(b.id==='first')set({offset:0},true);
+ else if(b.dataset.up)set({offset:+b.dataset.up},true);
+ else if(b.dataset.page){e.preventDefault();/* TODO: 카탈로그 PDF 해당 페이지 열기 */}
+});
+document.addEventListener('change',e=>{const t=e.target;if(t.id==='volt')set({v:t.value});if(t.id==='pf')set({pf:t.value});});
+document.addEventListener('input',e=>{const t=e.target;if(t.id==='motor'){S=Object.assign(S,{offset:0,more:false},S.mode==='kW'?{kw:t.value}:{amp:t.value});renderMain();}});
+render();
+</script>
+</body>
+</html>

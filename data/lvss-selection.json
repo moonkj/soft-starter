@@ -1,0 +1,574 @@
+{
+  "source": "LS ELECTRIC LV Soft Starter Catalog KO 2022.03 (p.6 선정 가이드, p.7-11 사양, p.12 옵션, p.15-18 외형)",
+  "connection": "In Line",
+  "notes": [
+    "null = 해당 Trip Class에서 이 전류 행에 맞는 모델 없음(카탈로그 ⬇ 표시: 다음 그룹 참조)",
+    "카탈로그 p.6 Trip Class 20 / 17A 칸의 \"VMX-SGY-103\"은 오타로 보고 LS-LVSS-103으로 입력함 — 확인 필요",
+    "307 이상 모델은 형명 끝에 제어전원 접미사: -1 = AC110V, -2 = AC220V, DC24V 미지원",
+    "dim = W x H x D (mm), 도면 판독값 — 방향 확인 필요"
+  ],
+  "dutyGroups": {
+    "1": {
+      "startsPerHour": 5,
+      "ratedAmbientC": 50,
+      "label": "5 starts/hour @ 50℃"
+    },
+    "2": {
+      "startsPerHour": 3,
+      "ratedAmbientC": 50,
+      "label": "3 starts/hour @ 50℃"
+    },
+    "3": {
+      "startsPerHour": 3,
+      "ratedAmbientC": 40,
+      "label": "3 starts/hour @ 40℃"
+    }
+  },
+  "rows": [
+    {
+      "motorFlcA": 17,
+      "ratedKw": {
+        "230V": 4,
+        "400V": 7.5,
+        "440V": 7.5
+      },
+      "model": {
+        "tc10": "101",
+        "tc20": "103",
+        "tc30": "105"
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 22,
+      "ratedKw": {
+        "230V": 5.5,
+        "400V": 11,
+        "440V": 11
+      },
+      "model": {
+        "tc10": "103",
+        "tc20": "105",
+        "tc30": "107"
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 29,
+      "ratedKw": {
+        "230V": 7.5,
+        "400V": 15,
+        "440V": 15
+      },
+      "model": {
+        "tc10": "105",
+        "tc20": "107",
+        "tc30": "109"
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 35,
+      "ratedKw": {
+        "230V": 7.5,
+        "400V": 18.5,
+        "440V": 18.5
+      },
+      "model": {
+        "tc10": "107",
+        "tc20": "109",
+        "tc30": "111"
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 41,
+      "ratedKw": {
+        "230V": 11,
+        "400V": 22,
+        "440V": 22
+      },
+      "model": {
+        "tc10": "109",
+        "tc20": "111",
+        "tc30": "113"
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 55,
+      "ratedKw": {
+        "230V": 15,
+        "400V": 30,
+        "440V": 30
+      },
+      "model": {
+        "tc10": "111",
+        "tc20": "113",
+        "tc30": "115"
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 66,
+      "ratedKw": {
+        "230V": 18.5,
+        "400V": 37,
+        "440V": 37
+      },
+      "model": {
+        "tc10": "113",
+        "tc20": "115",
+        "tc30": "117"
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 80,
+      "ratedKw": {
+        "230V": 22,
+        "400V": 45,
+        "440V": 45
+      },
+      "model": {
+        "tc10": "115",
+        "tc20": "117",
+        "tc30": "201"
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 100,
+      "ratedKw": {
+        "230V": 30,
+        "400V": 55,
+        "440V": 55
+      },
+      "model": {
+        "tc10": "117",
+        "tc20": "201",
+        "tc30": "203"
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 132,
+      "ratedKw": {
+        "230V": 37,
+        "400V": 75,
+        "440V": 90
+      },
+      "model": {
+        "tc10": "201",
+        "tc20": "203",
+        "tc30": "205"
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 160,
+      "ratedKw": {
+        "230V": 45,
+        "400V": 90,
+        "440V": 110
+      },
+      "model": {
+        "tc10": "203",
+        "tc20": "205",
+        "tc30": null
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 195,
+      "ratedKw": {
+        "230V": 55,
+        "400V": 110,
+        "440V": 132
+      },
+      "model": {
+        "tc10": "205",
+        "tc20": null,
+        "tc30": null
+      },
+      "dutyGroup": 1
+    },
+    {
+      "motorFlcA": 160,
+      "ratedKw": {
+        "230V": 45,
+        "400V": 90,
+        "440V": 110
+      },
+      "model": {
+        "tc10": null,
+        "tc20": null,
+        "tc30": "301"
+      },
+      "dutyGroup": 2
+    },
+    {
+      "motorFlcA": 195,
+      "ratedKw": {
+        "230V": 55,
+        "400V": 110,
+        "440V": 132
+      },
+      "model": {
+        "tc10": null,
+        "tc20": "301",
+        "tc30": "303"
+      },
+      "dutyGroup": 2
+    },
+    {
+      "motorFlcA": 242,
+      "ratedKw": {
+        "230V": 75,
+        "400V": 132,
+        "440V": 150
+      },
+      "model": {
+        "tc10": "301",
+        "tc20": "303",
+        "tc30": "305"
+      },
+      "dutyGroup": 2
+    },
+    {
+      "motorFlcA": 302,
+      "ratedKw": {
+        "230V": 90,
+        "400V": 160,
+        "440V": 185
+      },
+      "model": {
+        "tc10": "303",
+        "tc20": "305",
+        "tc30": "307"
+      },
+      "dutyGroup": 2
+    },
+    {
+      "motorFlcA": 361,
+      "ratedKw": {
+        "230V": 110,
+        "400V": 200,
+        "440V": 220
+      },
+      "model": {
+        "tc10": "305",
+        "tc20": "307",
+        "tc30": "309"
+      },
+      "dutyGroup": 2
+    },
+    {
+      "motorFlcA": 430,
+      "ratedKw": {
+        "230V": 132,
+        "400V": 250,
+        "440V": 280
+      },
+      "model": {
+        "tc10": "307",
+        "tc20": "309",
+        "tc30": null
+      },
+      "dutyGroup": 2
+    },
+    {
+      "motorFlcA": 500,
+      "ratedKw": {
+        "230V": 160,
+        "400V": 280,
+        "440V": 315
+      },
+      "model": {
+        "tc10": "309",
+        "tc20": null,
+        "tc30": null
+      },
+      "dutyGroup": 2
+    },
+    {
+      "motorFlcA": 430,
+      "ratedKw": {
+        "230V": 132,
+        "400V": 250,
+        "440V": 280
+      },
+      "model": {
+        "tc10": null,
+        "tc20": null,
+        "tc30": "401"
+      },
+      "dutyGroup": 3
+    },
+    {
+      "motorFlcA": 500,
+      "ratedKw": {
+        "230V": 160,
+        "400V": 280,
+        "440V": 315
+      },
+      "model": {
+        "tc10": null,
+        "tc20": "401",
+        "tc30": "403"
+      },
+      "dutyGroup": 3
+    },
+    {
+      "motorFlcA": 610,
+      "ratedKw": {
+        "230V": 200,
+        "400V": 355,
+        "440V": 375
+      },
+      "model": {
+        "tc10": "401",
+        "tc20": "403",
+        "tc30": "501"
+      },
+      "dutyGroup": 3
+    },
+    {
+      "motorFlcA": 722,
+      "ratedKw": {
+        "230V": 220,
+        "400V": 400,
+        "440V": 425
+      },
+      "model": {
+        "tc10": "403",
+        "tc20": "501",
+        "tc30": "503"
+      },
+      "dutyGroup": 3
+    },
+    {
+      "motorFlcA": 850,
+      "ratedKw": {
+        "230V": 280,
+        "400V": 500,
+        "440V": 530
+      },
+      "model": {
+        "tc10": "501",
+        "tc20": "503",
+        "tc30": "505"
+      },
+      "dutyGroup": 3
+    },
+    {
+      "motorFlcA": 960,
+      "ratedKw": {
+        "230V": 315,
+        "400V": 560,
+        "440V": 600
+      },
+      "model": {
+        "tc10": "503",
+        "tc20": "505",
+        "tc30": null
+      },
+      "dutyGroup": 3
+    },
+    {
+      "motorFlcA": 1080,
+      "ratedKw": {
+        "230V": 355,
+        "400V": 630,
+        "440V": 670
+      },
+      "model": {
+        "tc10": "505",
+        "tc20": null,
+        "tc30": null
+      },
+      "dutyGroup": 3
+    }
+  ],
+  "frames": [
+    {
+      "range": "101-105",
+      "from": 101,
+      "to": 105,
+      "size": "Size 1",
+      "amp": "최대 100A",
+      "bypass": "내장 Bypass",
+      "ip": "IP20",
+      "term": "Cage Clamp",
+      "dim": "95 × 270 × 176",
+      "amb": "-20 ~ 50℃",
+      "page": "7",
+      "guard": "Finger Guard LS-LVSS-005",
+      "controlVoltage": [
+        "DC24V",
+        "AC110V",
+        "AC220V"
+      ]
+    },
+    {
+      "range": "107-117",
+      "from": 107,
+      "to": 117,
+      "size": "Size 1",
+      "amp": "최대 100A",
+      "bypass": "내장 Bypass",
+      "ip": "IP20",
+      "term": "Cage Clamp",
+      "dim": "95 × 270 × 176",
+      "amb": "-20 ~ 50℃",
+      "page": "7",
+      "guard": "Finger Guard LS-LVSS-005",
+      "controlVoltage": [
+        "DC24V",
+        "AC110V",
+        "AC220V"
+      ]
+    },
+    {
+      "range": "201-205",
+      "from": 201,
+      "to": 205,
+      "size": "Size 2",
+      "amp": "최대 195A",
+      "bypass": "내장 Bypass",
+      "ip": "IP20",
+      "term": "Cage Clamp",
+      "dim": "143 × 318 × 232",
+      "amb": "-20 ~ 50℃",
+      "page": "8",
+      "guard": "Finger Guard LS-LVSS-009",
+      "controlVoltage": [
+        "DC24V",
+        "AC110V",
+        "AC220V"
+      ]
+    },
+    {
+      "range": "301-305",
+      "from": 301,
+      "to": 305,
+      "size": "Size 3",
+      "amp": "최대 500A",
+      "bypass": "내장 Bypass",
+      "ip": "IP00",
+      "term": "Plain Busbar",
+      "dim": "205 × 490 × 310",
+      "amb": "-20 ~ 50℃",
+      "page": "9",
+      "guard": "",
+      "controlVoltage": [
+        "DC24V",
+        "AC110V",
+        "AC220V"
+      ]
+    },
+    {
+      "range": "307-309",
+      "from": 307,
+      "to": 309,
+      "size": "Size 3",
+      "amp": "최대 500A",
+      "bypass": "내장 Bypass",
+      "ip": "IP00",
+      "term": "Plain Busbar",
+      "dim": "205 × 494 × 310",
+      "amb": "-20 ~ 50℃",
+      "page": "9",
+      "guard": "",
+      "controlVoltage": [
+        "AC110V (-1)",
+        "AC220V (-2)"
+      ]
+    },
+    {
+      "range": "401-403",
+      "from": 401,
+      "to": 403,
+      "size": "Size 4",
+      "amp": "최대 722A",
+      "bypass": "Bypass 없음",
+      "ip": "IP00",
+      "term": "Plain Busbar",
+      "dim": "490 × 677 × 282",
+      "amb": "-20 ~ 40℃",
+      "page": "10",
+      "guard": "",
+      "controlVoltage": [
+        "AC110V (-1)",
+        "AC220V (-2)"
+      ]
+    },
+    {
+      "range": "501-505",
+      "from": 501,
+      "to": 505,
+      "size": "Size 5",
+      "amp": "최대 1080A",
+      "bypass": "Bypass 없음",
+      "ip": "IP00",
+      "term": "Plain Busbar",
+      "dim": "635 × 731 × 324",
+      "amb": "-20 ~ 40℃",
+      "page": "11",
+      "guard": "",
+      "controlVoltage": [
+        "AC110V (-1)",
+        "AC220V (-2)"
+      ]
+    }
+  ],
+  "options": [
+    {
+      "name": "Modbus Splitter RJ12 to RJ45",
+      "model": "LS-LVSS-026",
+      "role": "RJ45 cable을 RJ12 cable로 변환"
+    },
+    {
+      "name": "Modbus Terminating Resistor RJ45",
+      "model": "LS-LVSS-035",
+      "role": "Modbus 종단저항기"
+    },
+    {
+      "name": "Remote Keypad Kit Modbus Master",
+      "model": "LS-LVSS-012",
+      "role": "원격 디스플레이"
+    },
+    {
+      "name": "Modbus Splitter RJ12 to RJ45",
+      "model": "LS-LVSS-011",
+      "role": "Modbus signal 분배기"
+    },
+    {
+      "name": "Finger Guard kit IP20",
+      "model": "LS-LVSS-005",
+      "appliesTo": "101-117",
+      "role": "전기 충전부 접촉 방지"
+    },
+    {
+      "name": "Finger Guard kit IP20",
+      "model": "LS-LVSS-009",
+      "appliesTo": "201-205",
+      "role": "전기 충전부 접촉 방지"
+    },
+    {
+      "name": "Anybus M40 Ethernet/IP",
+      "model": "LS-LVSS-6604",
+      "role": "TCP/IP 사용"
+    },
+    {
+      "name": "Anybus M30 Modbus TCP",
+      "model": "LS-LVSS-6223",
+      "role": "TCP/IP 사용"
+    },
+    {
+      "name": "Anybus M30 Profibus DP",
+      "model": "LS-LVSS-6270",
+      "role": "TCP/IP 사용"
+    }
+  ]
+}

@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>A안 · 카드 추천형</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&amp;family=IBM+Plex+Sans+KR:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F5FBF}a:hover{color:#174A96}
+button{font-family:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="min-height: 1500px; background: #F4F6F9; font-family: 'IBM Plex Sans KR', 'Malgun Gothic', system-ui, sans-serif; color: #0E1A2B">
+  <header style="background: #FFFFFF; border-bottom: 1px solid #DDE2E8">
+    <div style="max-width: 1440px; margin: 0 auto; padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+      <div style="display: flex; align-items: center; gap: 12px">
+        <span style="width: 4px; height: 26px; background: #D7192D"></span>
+        <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em">Soft Starter Selection Tool</h1>
+      </div>
+      <span style="font-size: 13px; color: #5A6577">LVSS 시리즈 · 200~480V · 50/60Hz 공용</span>
+    </div>
+  </header>
+
+  <div style="max-width: 1440px; margin: 0 auto; padding: 28px 32px 48px; display: flex; flex-wrap: wrap; gap: 28px; box-sizing: border-box">
+<aside style="flex: 1 1 300px; max-width: 380px; min-width: 0; background: #FFFFFF; border: 1px solid #DDE2E8; border-top: 3px solid #1F2A3A; border-radius: 6px; padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px; align-self: flex-start">
+  <div style="display: flex; flex-direction: column; gap: 8px; padding-bottom: 20px; border-bottom: 1px solid #E6EAEF">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+      <h2 style="margin: 0; font-size: 19px; font-weight: 700">사용 조건</h2>
+      <button onClick="{{reset}}" style="min-height: 36px; padding: 0 12px; border: 1px solid #B9C1CC; background: #F4F6F9; color: #3D4757; border-radius: 4px; font-size: 13px">조건 초기화</button>
+    </div>
+    <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #5A6577">전압과 모터 명판의 정격전류(A)만 넣어도 추천이 나와요. 명판을 확인하기 어려우면 kW로 넣어 주세요.</p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <label for="volt" style="font-size: 14px; font-weight: 700">전원 전압 <span style="color: #1F5FBF; font-size: 12px; font-weight: 600">필수</span></label>
+    <div style="display: flex; gap: 8px">
+      <select id="volt" value="{{vSel}}" onChange="{{onV}}" style="flex: 1 1 auto; min-width: 0; height: 48px; padding: 0 12px; border: 1px solid #C9D0DA; border-radius: 4px; font-size: 15px; font-family: inherit; background: #FFFFFF; color: #0E1A2B">
+        <sc-for list="{{vOpts}}" as="o" hint-placeholder-count="9"><option value="{{o.v}}">{{o.label}}</option></sc-for>
+      </select>
+      <div style="display: flex">
+        <sc-for list="{{hzs}}" as="o" hint-placeholder-count="2">
+          <button onClick="{{o.pick}}" style="width: 60px; height: 48px; border: 1px solid {{o.bd}}; background: {{o.bg}}; color: {{o.fg}}; font-size: 14px; font-weight: 600">{{o.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <span style="font-size: 14px; font-weight: 700">모터 전류 <span style="color: #1F5FBF; font-size: 12px; font-weight: 600">필수</span></span>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr))">
+      <sc-for list="{{modes}}" as="o" hint-placeholder-count="2">
+        <button onClick="{{o.pick}}" style="height: 48px; border: 1px solid {{o.bd}}; background: {{o.bg}}; color: {{o.fg}}; font-size: 14px; font-weight: 600">{{o.label}}</button>
+      </sc-for>
+    </div>
+    <div style="display: flex; gap: 8px">
+      <input id="motor" aria-label="모터 전류 또는 용량" type="number" inputmode="decimal" value="{{inputVal}}" onChange="{{onInput}}" style="flex: 1 1 auto; min-width: 0; height: 48px; padding: 0 14px; border: 1px solid #C9D0DA; border-radius: 4px; font-size: 17px; font-family: inherit; color: #0E1A2B">
+      <span style="width: 56px; height: 48px; border: 1px solid #C9D0DA; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #3D4757; background: #F4F6F9">{{unit}}</span>
+    </div>
+    <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: #5A6577">{{inputHelp}}</p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <span style="font-size: 14px; font-weight: 700">Trip Class</span>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr))">
+      <sc-for list="{{tcs}}" as="o" hint-placeholder-count="3">
+        <button onClick="{{o.pick}}" style="height: 48px; border: 1px solid {{o.bd}}; background: {{o.bg}}; color: {{o.fg}}; font-size: 14px; font-weight: 600">{{o.label}}</button>
+      </sc-for>
+    </div>
+    <p style="margin: 0; padding: 10px 12px; background: #F1F4F8; border-radius: 4px; font-size: 12.5px; line-height: 1.6; color: #3D4757">{{tcDesc}}</p>
+  </div>
+
+  <div style="border: 1px solid #E1E6EC; border-radius: 4px; background: #FAFBFC">
+    <button onClick="{{toggle}}" aria-expanded="{{open}}" style="width: 100%; min-height: 52px; padding: 0 16px; border: 0; background: transparent; display: flex; align-items: center; justify-content: space-between; font-size: 15px; font-weight: 700; color: #0E1A2B">
+      <span>상세 조건</span><span style="color: #1F5FBF; font-size: 20px">{{openSign}}</span>
+    </button>
+    <sc-if value="{{open}}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 4px 16px 18px; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; font-weight: 700">제어 전원</span>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
+            <sc-for list="{{ctrls}}" as="o" hint-placeholder-count="4"><button onClick="{{o.pick}}" style="height: 44px; border: 1px solid {{o.bd}}; background: {{o.bg}}; color: {{o.fg}}; border-radius: 4px; font-size: 13px; font-weight: 600">{{o.label}}</button></sc-for>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; font-weight: 700">주위 온도</span>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+            <sc-for list="{{ambs}}" as="o" hint-placeholder-count="3"><button onClick="{{o.pick}}" style="height: 44px; border: 1px solid {{o.bd}}; background: {{o.bg}}; color: {{o.fg}}; border-radius: 4px; font-size: 13px; font-weight: 600">{{o.label}}</button></sc-for>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 13px; font-weight: 700">기동 횟수</span>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+            <sc-for list="{{startsO}}" as="o" hint-placeholder-count="3"><button onClick="{{o.pick}}" style="height: 44px; border: 1px solid {{o.bd}}; background: {{o.bg}}; color: {{o.fg}}; border-radius: 4px; font-size: 13px; font-weight: 600">{{o.label}}</button></sc-for>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <label for="pf" style="font-size: 13px; font-weight: 700">효율 × 역률 (kW 계산용)</label>
+          <input id="pf" type="number" step="0.01" value="{{s.pf}}" onChange="{{onPf}}" style="height: 44px; padding: 0 12px; border: 1px solid #C9D0DA; border-radius: 4px; font-size: 15px; font-family: inherit">
+        </div>
+        <p style="margin: 0; font-size: 12px; line-height: 1.6; color: #5A6577">결선은 In Line 기준이에요. In Delta로 결선하면 한 단계 높은 모터 용량까지 쓸 수 있어요.</p>
+      </div>
+    </sc-if>
+  </div>
+</aside>
+
+    <main style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+<section aria-label="선정 기준" style="background: #1F2A3A; color: #FFFFFF; border-radius: 6px; padding: 26px 30px; display: flex; flex-wrap: wrap; gap: 28px; align-items: center">
+  <div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 6px; padding-right: 28px; border-right: 1px solid #3A475C">
+    <span style="font-size: 13px; color: #C3CCD8; display: flex; align-items: center; gap: 8px"><span style="width: 7px; height: 7px; border-radius: 50%; background: #6FA3F0"></span>선정 기준 전류</span>
+    <div style="display: flex; align-items: baseline; gap: 8px"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 64px; font-weight: 600; line-height: 1">{{bigI}}</span><span style="font-size: 22px; color: #C3CCD8">A</span></div>
+  </div>
+  <div style="flex: 999 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+      <sc-for list="{{chips}}" as="ch" hint-placeholder-count="7">
+        <span style="padding: 6px 11px; border: 1px solid {{ch.bd}}; background: {{ch.bg}}; color: {{ch.fg}}; border-radius: 3px; font-size: 13px; font-weight: 600">{{ch.label}}</span>
+      </sc-for>
+    </div>
+    <div style="border-top: 1px dashed #4A576C; padding-top: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 1.7; color: #DCE2EA">{{formula}}<br><span style="color: #AEB9C8">{{formulaNote}}</span></div>
+  </div>
+</section>
+
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap">
+        <h2 style="margin: 0; font-size: 20px; font-weight: 700">추천 모델 <span style="color: #5A6577; font-weight: 500">{{count}}건</span></h2>
+        <span style="font-size: 13px; color: #5A6577">정격 여유가 작은 순서예요. 카드마다 해당 카탈로그 페이지를 볼 수 있어요.</span>
+      </div>
+
+      <sc-if value="{{shifted}}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; background: #E9F0FB; border-radius: 4px; font-size: 14px; color: #1E3A66">
+          <span>한 단계 위 모델부터 보고 있어요.</span>
+          <button onClick="{{backFirst}}" style="min-height: 40px; padding: 0 14px; border: 1px solid #1F5FBF; background: #FFFFFF; color: #1F5FBF; border-radius: 4px; font-size: 13px; font-weight: 600">처음 추천으로</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{hasItems}}" hint-placeholder-val="{{ true }}">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr)); gap: 20px">
+          <sc-for list="{{visible}}" as="it" hint-placeholder-count="4">
+            <article style="background: #FFFFFF; border: 1px solid {{it.cardBd}}; border-top: 3px solid {{it.cardTop}}; border-radius: 6px; padding: 22px; display: flex; flex-direction: column; gap: 16px">
+              <div style="display: flex; gap: 18px">
+                <div style="flex: 0 0 96px; height: 124px; background: #EEF1F5; border: 1px dashed #B9C1CC; border-radius: 4px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 11px; color: #5A6577">제품<br>이미지</div>
+                <div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+                  <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                    <sc-if value="{{it.best}}" hint-placeholder-val="{{ false }}"><span style="padding: 3px 8px; background: #1F5FBF; color: #FFFFFF; border-radius: 3px; font-size: 12px; font-weight: 700">정격 여유 최소</span></sc-if>
+                    <span style="padding: 3px 8px; border: 1px solid #9DB8E3; color: #1E4C8F; background: #EEF4FC; border-radius: 3px; font-size: 12px; font-weight: 600">{{it.bypass}}</span>
+                    <span style="padding: 3px 8px; border: 1px solid #C9D0DA; color: #3D4757; border-radius: 3px; font-size: 12px; font-weight: 600">{{it.ip}}</span>
+                  </div>
+                  <span style="font-size: 13px; color: #5A6577">LVSS 시리즈 · {{it.size}} · {{it.amp}}</span>
+                  <span style="font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600; letter-spacing: -0.01em">{{it.code}}</span>
+                  <sc-if value="{{it.incomplete}}" hint-placeholder-val="{{ false }}">
+                    <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: #3D4757">형명 끝자리는 제어전원으로 정해져요. 상세 조건에서 <strong>제어 전원</strong>을 고르면 형명이 완성돼요.</p>
+                  </sc-if>
+                  <span style="font-size: 13px; color: #5A6577">외형 {{it.dim}} mm · {{it.term}}</span>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid #EDF0F4">
+                <div style="display: flex; justify-content: space-between; font-size: 13.5px">
+                  <span style="color: #3D4757">필요 <strong style="font-family: 'IBM Plex Mono', monospace">{{it.need}} A</strong> / 적용 <strong style="font-family: 'IBM Plex Mono', monospace">{{it.a}} A</strong></span>
+                  <span style="color: #3D4757">정격 여유 <strong style="color: {{it.mgColor}}">{{it.mg}}</strong></span>
+                </div>
+                <div style="height: 8px; background: #E6EAEF; border-radius: 4px; overflow: hidden"><div style="height: 8px; width: {{it.load}}; background: {{it.barColor}}"></div></div>
+                <span style="font-size: 13px; color: #5A6577">{{it.duty}}</span>
+              </div>
+
+              <sc-if value="{{it.hasNext}}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 13.5px">
+                  <span style="color: #3D4757">한 단계 위: <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">{{it.nextCode}}</span> ({{it.nextA}} A)</span>
+                  <button onClick="{{it.up}}" style="min-height: 40px; padding: 0 4px; border: 0; background: transparent; color: #1F5FBF; font-size: 13.5px; font-weight: 700; text-decoration: underline">한 단계 위로 바꿔 보기</button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{it.low}}" hint-placeholder-val="{{ false }}">
+                <div style="padding: 12px 14px; background: #FFF4E0; border: 1px solid #F0C27A; border-radius: 4px; font-size: 13px; line-height: 1.6; color: #6E3C00"><strong>주의</strong> 정격 여유가 5% 미만이에요. 한 단계 위 모델({{it.nextCode}})도 같이 확인해 보세요.</div>
+              </sc-if>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid #EDF0F4; font-size: 12.5px; color: #5A6577">
+                <span>{{it.ctrlTxt}}</span>
+                <a href="#" style="font-weight: 600">{{it.page}}</a>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+        <sc-if value="{{canMore}}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{showMore}}" style="align-self: center; min-height: 48px; padding: 0 28px; border: 1px solid #B9C1CC; background: #FFFFFF; color: #0E1A2B; border-radius: 4px; font-size: 14px; font-weight: 600">추천 모델 {{restCount}}건 더 보기</button>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{noItems}}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 40px; background: #FFFFFF; border: 1px solid #DDE2E8; border-radius: 6px; text-align: center; display: flex; flex-direction: column; gap: 8px">
+          <strong style="font-size: 17px">조건에 맞는 모델이 없어요</strong>
+          <span style="font-size: 14px; color: #5A6577">카탈로그 선정 범위는 최대 1080A예요. 상세 조건을 풀거나 기술상담센터(1544-2080)에 문의해 주세요.</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{invalid}}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 40px; background: #FFFFFF; border: 1px solid #DDE2E8; border-radius: 6px; text-align: center; font-size: 15px; color: #3D4757">왼쪽에 모터 전류나 kW를 넣으면 추천 모델이 나와요.</div>
+      </sc-if>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1360,"height":1500}}'>
+const ROWS=[
+[17,4,7.5,7.5,'101','103','105',1],[22,5.5,11,11,'103','105','107',1],[29,7.5,15,15,'105','107','109',1],[35,7.5,18.5,18.5,'107','109','111',1],[41,11,22,22,'109','111','113',1],[55,15,30,30,'111','113','115',1],[66,18.5,37,37,'113','115','117',1],[80,22,45,45,'115','117','201',1],[100,30,55,55,'117','201','203',1],[132,37,75,90,'201','203','205',1],[160,45,90,110,'203','205',null,1],[195,55,110,132,'205',null,null,1],
+[160,45,90,110,null,null,'301',2],[195,55,110,132,null,'301','303',2],[242,75,132,150,'301','303','305',2],[302,90,160,185,'303','305','307',2],[361,110,200,220,'305','307','309',2],[430,132,250,280,'307','309',null,2],[500,160,280,315,'309',null,null,2],
+[430,132,250,280,null,null,'401',3],[500,160,280,315,null,'401','403',3],[610,200,355,375,'401','403','501',3],[722,220,400,425,'403','501','503',3],[850,280,500,530,'501','503','505',3],[960,315,560,600,'503','505',null,3],[1080,355,630,670,'505',null,null,3]];
+const SEC={1:{starts:5,amb:50,txt:'5회/h 기동 · 50℃'},2:{starts:3,amb:50,txt:'3회/h 기동 · 50℃'},3:{starts:3,amb:40,txt:'3회/h 기동 · 40℃'}};
+function frame(m){const n=parseInt(m,10);
+ if(n<=105)return{size:'Size 1',amp:'최대 100A',bypass:'내장 Bypass',ip:'IP20',term:'Cage Clamp',dim:'95 × 270 × 176',amb:'-20 ~ 50℃',page:'7',guard:'Finger Guard LS-LVSS-005'};
+ if(n<=117)return{size:'Size 1',amp:'최대 100A',bypass:'내장 Bypass',ip:'IP20',term:'Cage Clamp',dim:'95 × 270 × 176',amb:'-20 ~ 50℃',page:'7',guard:'Finger Guard LS-LVSS-005'};
+ if(n<=205)return{size:'Size 2',amp:'최대 195A',bypass:'내장 Bypass',ip:'IP20',term:'Cage Clamp',dim:'143 × 318 × 232',amb:'-20 ~ 50℃',page:'8',guard:'Finger Guard LS-LVSS-009'};
+ if(n<=305)return{size:'Size 3',amp:'최대 500A',bypass:'내장 Bypass',ip:'IP00',term:'Plain Busbar',dim:'205 × 490 × 310',amb:'-20 ~ 50℃',page:'9',guard:''};
+ if(n<=309)return{size:'Size 3',amp:'최대 500A',bypass:'내장 Bypass',ip:'IP00',term:'Plain Busbar',dim:'205 × 494 × 310',amb:'-20 ~ 50℃',page:'9',guard:''};
+ if(n<=403)return{size:'Size 4',amp:'최대 722A',bypass:'Bypass 없음',ip:'IP00',term:'Plain Busbar',dim:'490 × 677 × 282',amb:'-20 ~ 40℃',page:'10',guard:''};
+ return{size:'Size 5',amp:'최대 1080A',bypass:'Bypass 없음',ip:'IP00',term:'Plain Busbar',dim:'635 × 731 × 324',amb:'-20 ~ 40℃',page:'11',guard:''};}
+function calcI(s){if(s.mode==='A')return parseFloat(s.amp)||0;const kw=parseFloat(s.kw)||0,v=parseFloat(s.v)||0,pf=parseFloat(s.pf)||0;if(!v||!pf)return 0;return kw*1000/(Math.sqrt(3)*v*pf);}
+function hits(s,I){const ti={10:4,20:5,30:6}[s.tc],out=[],seen={};
+ for(const r of ROWS){const m=r[ti],sec=SEC[r[7]];if(!m||r[0]<I||seen[m])continue;
+  if(s.amb===50&&sec.amb<50)continue;if(s.starts===5&&sec.starts<5)continue;if(s.ctrl==='DC24V'&&parseInt(m,10)>=307)continue;
+  seen[m]=1;out.push({m,a:r[0],sec});}
+ return out.sort((x,y)=>parseInt(x.m,10)-parseInt(y.m,10));}
+function code(m,ctrl){const n=parseInt(m,10);if(n<307)return 'LS-LVSS-'+m;if(ctrl==='AC110V')return 'LS-LVSS-'+m+'-1';if(ctrl==='AC220V')return 'LS-LVSS-'+m+'-2';return 'LS-LVSS-'+m+'-?';}
+const INIT={v:'380',hz:60,mode:'kW',kw:'55',amp:'104',tc:10,ctrl:null,amb:null,starts:null,pf:'0.80',open:false,offset:0,more:false,sel:0};
+function core(c){
+ const s=c.state,set=(o)=>c.setState(Object.assign({offset:0,sel:0},o));
+ const seg=(on)=>on?{bg:'#1F5FBF',fg:'#FFFFFF',bd:'#1F5FBF'}:{bg:'#FFFFFF',fg:'#3D4757',bd:'#D5DBE3'};
+ const I=calcI(s),valid=I>0,list=valid?hits(s,I):[];
+ const items=list.map((h,i)=>{const f=frame(h.m),n=parseInt(h.m,10),mg=Math.round((h.a-I)/I*100),next=list[i+1];return Object.assign({},f,{
+  i,code:code(h.m,s.ctrl),incomplete:n>=307&&!s.ctrl,a:String(h.a),need:String(Math.round(I)),mg:'+'+mg+'%',low:mg<5,ok:mg>=5,
+  load:Math.min(100,Math.round(I/h.a*100))+'%',duty:'Trip Class '+s.tc+' · '+h.sec.txt,
+  ctrlTxt:n>=307?'제어전원: -1 = AC110V, -2 = AC220V (DC24V 미지원)':'제어전원: DC24V / AC110V / AC220V 공용',
+  hasNext:!!next,nextCode:next?code(next.m,s.ctrl):'',nextA:next?String(next.a):'',best:i===0,page:'카탈로그 p.'+f.page,
+  up:()=>c.setState({offset:i+1,sel:i+1}),pick:()=>c.setState({sel:i})});});
+ const vOpts=['200','220','230','380','400','415','440','460','480'].map(v=>({v,label:v+' V'}));
+ const hzs=[50,60].map(h=>Object.assign({label:h+'Hz',pick:()=>c.setState({hz:h})},seg(s.hz===h)));
+ const modes=[['A','명판 전류(A)'],['kW','kW']].map(([m,label])=>Object.assign({label,pick:()=>set({mode:m})},seg(s.mode===m)));
+ const TCD={10:'과부하 시 10초 안에 트립. 기동이 가벼운 일반 부하에 써요.',20:'과부하 시 20초 안에 트립. 기동 시간이 긴 부하에 써요.',30:'과부하 시 30초 안에 트립. 관성이 커서 오래 걸려 기동하는 부하에 써요.'};
+ const tcs=[10,20,30].map(t=>Object.assign({label:'Class '+t,pick:()=>set({tc:t})},seg(s.tc===t)));
+ const ctrls=[[null,'선택 안 함'],['DC24V','DC24V'],['AC110V','AC110V'],['AC220V','AC220V']].map(([v,label])=>Object.assign({label,pick:()=>set({ctrl:v})},seg(s.ctrl===v)));
+ const ambs=[[null,'상관없음'],[40,'40℃ 이하'],[50,'50℃ 이하']].map(([v,label])=>Object.assign({label,pick:()=>set({amb:v})},seg(s.amb===v)));
+ const startsO=[[null,'상관없음'],[3,'시간당 3회'],[5,'시간당 5회']].map(([v,label])=>Object.assign({label,pick:()=>set({starts:v})},seg(s.starts===v)));
+ const chip=(label,on)=>on?{label,bg:'#2B4C80',fg:'#FFFFFF',bd:'#5E86C4'}:{label,bg:'transparent',fg:'#C3CCD8',bd:'#566379'};
+ const chips=[chip(s.v+' V · '+s.hz+'Hz',true),chip(s.mode==='kW'?(s.kw||'-')+' kW (계산)':(s.amp||'-')+' A (명판)',true),chip('Trip Class '+s.tc,true),
+  chip('주위 '+(s.amb?s.amb+'℃ 이하':'-'),!!s.amb),chip('기동 '+(s.starts?s.starts+'회/h':'-'),!!s.starts),chip('제어전원 '+(s.ctrl||'-'),!!s.ctrl),chip('결선 In Line',true)];
+ const formula=s.mode==='kW'?'I = P / (√3 · V · η·cosφ) = '+(s.kw||0)+'kW / (√3 · '+s.v+'V · '+s.pf+') ≈ '+Math.round(I)+' A':'명판 정격전류 '+(s.amp||0)+' A 그대로 선정에 써요.';
+ const formulaNote=s.mode==='kW'?'근삿값이에요. 명판 전류를 확인하면 더 정확해요.':'카탈로그 선정 가이드(In Line 결선) 기준이에요.';
+ return {s,set,I,valid,items,count:String(items.length),hasItems:items.length>0,noItems:valid&&items.length===0,invalid:!valid,
+  bigI:valid?String(Math.round(I)):'—',vOpts,vSel:s.v,hzs,modes,tcs,tcDesc:TCD[s.tc],ctrls,ambs,startsO,chips,formula,formulaNote,
+  inputVal:s.mode==='kW'?s.kw:s.amp,unit:s.mode==='kW'?'kW':'A',
+  inputHelp:s.mode==='kW'?'명판 전류를 확인하기 어려울 때만 쓰세요. 일반적인 효율·역률로 계산한 값이라 실제 모터와 다를 수 있어요.':'모터 명판에 적힌 정격전류(FLC)를 넣어 주세요. 가장 정확한 방법이에요.',
+  onV:(e)=>set({v:e.target.value}),onInput:(e)=>set(s.mode==='kW'?{kw:e.target.value}:{amp:e.target.value}),onPf:(e)=>set({pf:e.target.value}),
+  open:s.open,closed:!s.open,toggle:()=>c.setState({open:!s.open}),openSign:s.open?'−':'+',
+  reset:()=>c.setState(Object.assign({},INIT))};
+}
+
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = Object.assign({}, INIT); }
+  renderVals() {
+    const v = core(this), s = this.state;
+    const items = v.items.map(it => Object.assign({}, it, {
+      cardBd: it.best ? '#9DB8E3' : '#DDE2E8', cardTop: it.best ? '#1F5FBF' : '#DDE2E8',
+      mgColor: it.low ? '#9A4A00' : '#157F3B', barColor: it.low ? '#D97706' : '#1F5FBF'
+    }));
+    const rest = items.slice(s.offset);
+    const visible = s.more ? rest : rest.slice(0, 4);
+    return Object.assign(v, {
+      visible, shifted: s.offset > 0, backFirst: () => this.setState({ offset: 0 }),
+      canMore: !s.more && rest.length > 4, restCount: String(rest.length - 4), showMore: () => this.setState({ more: true })
+    });
+  }
+}
+</script>
+</body>
+</html>
